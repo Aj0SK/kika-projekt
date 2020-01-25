@@ -1,4 +1,7 @@
+CFLAGS = -Wall -O2 -std=c++17
+CC = g++
+
 all: writeBMPDemo
 
 writeBMPDemo:
-	g++ -std=c++17 writeBMPDemo.cpp && ./a.out
+	${CC} ${CFLAGS} writeBMPDemo.cpp && ./a.out
