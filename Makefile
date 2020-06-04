@@ -8,3 +8,6 @@ writeBMPDemo:
 
 loadMeshDemo:
 	${CC} ${CFLAGS} loadMeshDemo.cpp objLoad.cpp && ./a.out
+	
+sample:
+	${CC} ${CFLAGS} sample.cpp objLoad.cpp && ./a.out

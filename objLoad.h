@@ -1,5 +1,5 @@
-#ifndef BMPWRITE_H
-#define BMPWRITE_H
+#ifndef OBJLOAD_H
+#define OBJLOAD_H
 
 #include <iostream>
 #include <vector>
