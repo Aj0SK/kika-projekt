@@ -1,13 +1,14 @@
 CFLAGS = -Wall -O2 -std=c++17
 CC = g++
+SRC = src
 
 all: writeBMPDemo loadMeshDemo
 
 writeBMPDemo:
-	${CC} ${CFLAGS} writeBMPDemo.cpp && ./a.out
+	${CC} ${CFLAGS} $(SRC)/writeBMPDemo.cpp && ./a.out
 
 loadMeshDemo:
-	${CC} ${CFLAGS} loadMeshDemo.cpp objLoad.cpp && ./a.out
+	${CC} ${CFLAGS} $(SRC)/loadMeshDemo.cpp $(SRC)/objLoad.cpp && ./a.out
 	
 sample:
-	${CC} ${CFLAGS} sample.cpp objLoad.cpp && ./a.out
+	${CC} ${CFLAGS} $(SRC)/sample.cpp $(SRC)/objLoad.cpp && ./a.out
