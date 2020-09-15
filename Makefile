@@ -1,5 +1,5 @@
-CFLAGS = -Wall -O2 -std=c++17
-CC = g++
+CFLAGS = -Wall -O2 -std=c++17 -fsanitize=address
+CC = clang++
 SRC = src
 SAMPLES = samples
 BUILD = build
@@ -10,10 +10,13 @@ all: prepare samples
 prepare:
 	rm -r -f $(BUILD) $(RUN) && mkdir $(BUILD) $(RUN)
 
-samples: writeBMPDemo loadMeshDemo sample1 sample2 sample3
+samples: ray_tracing writeBMPDemo loadMeshDemo sample1 sample2 sample3
 
 objLoad.o:
 	${CC} ${CFLAGS} -c $(SRC)/objLoad.cpp -o $(BUILD)/objLoad.o
+
+ray_tracing: prepare objLoad.o
+	${CC} ${CFLAGS} -I $(SRC) $(SAMPLES)/ray_tracing.cpp -o $(RUN)/ray_tracing.out
 
 writeBMPDemo:
 	${CC} ${CFLAGS} -I $(SRC) $(SAMPLES)/writeBMPDemo.cpp
