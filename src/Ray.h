@@ -10,7 +10,7 @@ private:
   Vector dir;
 
 public:
-  Ray() {}
+  Ray() = default;
   Ray(const Vector& origin, const Vector& direction)
       : orig(origin), dir(direction)
   {
