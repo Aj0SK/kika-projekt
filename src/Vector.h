@@ -6,6 +6,9 @@
 #include <ostream>
 #include <vector>
 
+class Vector;
+using Point = Vector;
+
 class Vector
 {
 private:

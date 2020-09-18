@@ -1,3 +1,4 @@
+#include "Camera.h"
 #include "Color.h"
 #include "Hittable.h"
 #include "HittablesList.h"
@@ -17,13 +18,13 @@ using std::make_shared;
 Color ray_color(const Ray& r, const HittablesList& world)
 {
   HitRecord rec;
-  if (world.is_hit(r, 0, my_utils::infinity, rec))
+  if (world.is_hit(r, 0, my_constants::infinity, rec))
   {
     return 0.5 *
            (Color(1 + rec.normal.x(), 1 + rec.normal.y(), 1 + rec.normal.z()));
   }
   Vector unit_direction = r.direction().unit();
-  auto t = 0.5 * (unit_direction.y() + 1.0);
+  double t = 0.5 * (unit_direction.y() + 1.0);
   return (1.0 - t) * Color(1.0, 1.0, 1.0) + t * Color(0.5, 0.7, 1.0);
 }
 
@@ -38,20 +39,15 @@ int main()
   constexpr double viewport_width = aspect_ratio * viewport_height;
   constexpr double focal_length = 1.0;
 
-  Vector origin = Vector(0, 0, 0);
-  Vector horizontal = Vector(viewport_width, 0, 0);
-  Vector vertical = Vector(0, viewport_height, 0);
-  Vector lower_left_corner =
-      origin - horizontal / 2 - vertical / 2 - Vector(0, 0, focal_length);
+  // Camera
+  Camera cam(viewport_height, viewport_width, focal_length);
 
   // Objects
-
   HittablesList objects;
   objects.add(make_shared<Sphere>(Vector(0, 0, -1), 0.5));
   objects.add(make_shared<Sphere>(Vector(0, -100.5, -1), 100));
 
   // Render
-
   std::vector<std::byte> data;
 
   for (int j = H - 1; j >= 0; --j)
@@ -60,7 +56,7 @@ int main()
     {
       double u = double(i) / (W - 1);
       double v = double(j) / (H - 1);
-      Ray r(origin, lower_left_corner + u * horizontal + v * vertical - origin);
+      Ray r = cam.get_ray(u, v);
       Color pixel_color = ray_color(r, objects);
       data.push_back(pixel_color.b_byte());
       data.push_back(pixel_color.g_byte());
