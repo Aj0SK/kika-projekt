@@ -2,16 +2,28 @@
 #define COLOR_H
 
 #include "Vector.h"
+#include <algorithm>
 #include <cstddef>
+
+using std::clamp;
 
 struct Color : Vector
 {
   double _r, _g, _b;
   Color(double r, double g, double b) : _r(r), _g(g), _b(b){};
   Color() {}
-  std::byte r_byte() { return static_cast<std::byte>(255.0 * _r); }
-  std::byte g_byte() { return static_cast<std::byte>(255.0 * _g); }
-  std::byte b_byte() { return static_cast<std::byte>(255.0 * _b); }
+  std::byte r_byte()
+  {
+    return static_cast<std::byte>(256.0 * clamp(_r, 0.0, 0.999));
+  }
+  std::byte g_byte()
+  {
+    return static_cast<std::byte>(256.0 * clamp(_g, 0.0, 0.999));
+  }
+  std::byte b_byte()
+  {
+    return static_cast<std::byte>(256.0 * clamp(_b, 0.0, 0.999));
+  }
 
   friend Color operator*(const double k, const Color& a)
   {

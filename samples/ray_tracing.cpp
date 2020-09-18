@@ -32,8 +32,9 @@ int main()
 {
   // Image
   constexpr double aspect_ratio = 16.0 / 9.0;
-  constexpr int W = 400;
+  constexpr int W = 800;
   constexpr int H = static_cast<int>(W / aspect_ratio);
+  constexpr int samples_per_pixel = 100;
 
   constexpr double viewport_height = 2.0;
   constexpr double viewport_width = aspect_ratio * viewport_height;
@@ -54,10 +55,17 @@ int main()
   {
     for (int i = 0; i < W; ++i)
     {
-      double u = double(i) / (W - 1);
-      double v = double(j) / (H - 1);
-      Ray r = cam.get_ray(u, v);
-      Color pixel_color = ray_color(r, objects);
+      Color pixel_color{0, 0, 0};
+      for (int s = 0; s < samples_per_pixel; ++s)
+      {
+        double u = (i + random_double()) / (W - 1);
+        double v = (j + random_double()) / (H - 1);
+        Ray r = cam.get_ray(u, v);
+        pixel_color = pixel_color + ray_color(r, objects);
+      }
+
+      pixel_color = (1.0 / samples_per_pixel) * pixel_color;
+
       data.push_back(pixel_color.b_byte());
       data.push_back(pixel_color.g_byte());
       data.push_back(pixel_color.r_byte());
