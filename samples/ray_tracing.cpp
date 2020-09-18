@@ -13,6 +13,9 @@
 #include <iostream>
 #include <vector>
 
+using std::cout;
+using std::endl;
+
 using std::make_shared;
 
 Color ray_color(const Ray& r, const HittablesList& world)
@@ -32,9 +35,9 @@ int main()
 {
   // Image
   constexpr double aspect_ratio = 16.0 / 9.0;
-  constexpr int W = 800;
+  constexpr int W = 1200;
   constexpr int H = static_cast<int>(W / aspect_ratio);
-  constexpr int samples_per_pixel = 100;
+  constexpr int samples_per_pixel = 50;
 
   constexpr double viewport_height = 2.0;
   constexpr double viewport_width = aspect_ratio * viewport_height;
@@ -49,7 +52,7 @@ int main()
   objects.add(make_shared<Sphere>(Vector(0, -100.5, -1), 100));
 
   // Render
-  std::vector<std::byte> data;
+  std::vector<std::byte> data(W * H * 3);
 
   for (int j = H - 1; j >= 0; --j)
   {
@@ -66,11 +69,14 @@ int main()
 
       pixel_color = (1.0 / samples_per_pixel) * pixel_color;
 
-      data.push_back(pixel_color.b_byte());
-      data.push_back(pixel_color.g_byte());
-      data.push_back(pixel_color.r_byte());
+      int index = ((H - j - 1) * W + i) * 3;
+      data[index] = pixel_color.b_byte();
+      data[index + 1] = pixel_color.g_byte();
+      data[index + 2] = pixel_color.r_byte();
     }
   }
+
+  cout << "Data size is " << data.size() << " of " << W << "x" << H << endl;
 
   bmp::bmpWrite("testOut.bmp", W, H, data);
 
